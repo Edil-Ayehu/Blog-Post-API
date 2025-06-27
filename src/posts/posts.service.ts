@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Post } from './post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from 'src/authors/author.entity';
+import { CreatePostDto } from './dto/create-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -13,10 +14,10 @@ export class PostsService {
         private readonly authorRepository: Repository<Author>,
     ) {}
 
-    async create(postData: {title: string, content: string, authorId: number}){
+    async create(createPostDto: CreatePostDto){
         // find author with the given author id
         const author = await this.authorRepository.findOne({
-            where: {id: postData.authorId}
+            where: {id: createPostDto.authorId}
         });
 
         if(!author) {
@@ -24,8 +25,8 @@ export class PostsService {
         }
 
         const newPost = this.postRepository.create({
-            title: postData.title,
-            content: postData.content,
+            title: createPostDto.title,
+            content: createPostDto.content,
             author,
         })
 

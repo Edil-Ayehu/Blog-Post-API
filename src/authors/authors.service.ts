@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Author } from './author.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateAuthorDto } from './dto/create-author.dto';
 
 @Injectable()
 export class AuthorsService {
@@ -10,8 +11,8 @@ export class AuthorsService {
         private readonly authorRepository: Repository<Author>
     ) {}
 
-    create(author: Partial<Author>) {
-        const newAuthor = this.authorRepository.create(author)
+    create(createAuthorDto: CreateAuthorDto) {
+        const newAuthor = this.authorRepository.create(createAuthorDto)
         return this.authorRepository.save(newAuthor)
     }
 
