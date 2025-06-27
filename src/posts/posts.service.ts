@@ -4,6 +4,7 @@ import { Post } from './post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Author } from 'src/authors/author.entity';
 import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -41,5 +42,27 @@ export class PostsService {
         return this.postRepository.findOne({
             where: {id}
         })
+    }
+
+    async update(id: number, updatePostDto: UpdatePostDto) {
+        const post = await this.postRepository.findOne({where: {id}})
+
+        if(!post) {
+            throw new NotFoundException('Post not found!')
+        }
+
+        Object.assign(post, updatePostDto)
+
+        return this.postRepository.save(post)
+    }
+
+    async remove(id:number) {
+        const post = await this.postRepository.findOne({where: {id}})
+
+        if(!post) {
+            throw new NotFoundException('Post not found!')
+        }
+
+        return this.postRepository.remove(post)
     }
 }
