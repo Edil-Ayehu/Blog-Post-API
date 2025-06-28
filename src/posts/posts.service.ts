@@ -63,6 +63,11 @@ export class PostsService {
             throw new NotFoundException('Post not found!')
         }
 
-        return this.postRepository.remove(post)
+        this.postRepository.remove(post)
+
+        return {
+            deleted: true,
+            id,
+        }
     }
 }
